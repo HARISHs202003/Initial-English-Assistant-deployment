@@ -1,5 +1,4 @@
-let conversation = [];
-const MAX_HISTORY = 8;
+
 let currentMode = null;
 
 const chat = document.getElementById("chat");
@@ -39,55 +38,31 @@ async function sendMessage() {
     const text = input.value.trim();
     if (!text || !currentMode) return;
 
-    // 1️⃣ Show user message
     addMessage(text, "user");
     input.value = "";
     sendBtn.disabled = true;
 
-    // 2️⃣ SAVE USER MESSAGE TO MEMORY
-    conversation.push({
-        role: "user",
-        content: text
-    });
-
-    // 3️⃣ LIMIT MEMORY SIZE
-    if (conversation.length > MAX_HISTORY * 2) {
-        conversation = conversation.slice(-MAX_HISTORY * 2);
-    }
-
     try {
-        // 4️⃣ SEND FULL MEMORY TO BACKEND
         const response = await fetch("/chat", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-API-KEY": API_KEY
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                mode: currentMode,
-                messages: conversation
+                text: text,
+                mode: currentMode
             })
         });
 
         const data = await response.json();
+
         if (!response.ok) throw new Error();
 
-        // 5️⃣ SAVE AI REPLY TO MEMORY
-        conversation.push({
-            role: "assistant",
-            content: data.reply
-        });
-
-        // 6️⃣ SHOW AI MESSAGE
         addMessage(data.reply, "bot");
-
-    } catch (err) {
+    } catch {
         addMessage("❌ Error processing request.", "bot");
     } finally {
         sendBtn.disabled = false;
     }
 }
-
 
 sendBtn.addEventListener("click", sendMessage);
 
