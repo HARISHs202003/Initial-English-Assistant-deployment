@@ -1,8 +1,5 @@
-let conversation = [];
-const MAX_HISTORY = 8;
-const API_KEY = "english-assistant-secret-123";
-
 let currentMode = null;
+let conversation = [];
 
 const chat = document.getElementById("chat");
 const input = document.getElementById("inputText");
@@ -10,6 +7,8 @@ const sendBtn = document.getElementById("sendBtn");
 const inputArea = document.getElementById("inputArea");
 const modeSelect = document.getElementById("modeSelect");
 const toggle = document.getElementById("themeToggle");
+const backBtn = document.getElementById("backBtn");
+const title = document.getElementById("title");
 
 function addMessage(text, type) {
     const div = document.createElement("div");
@@ -21,48 +20,51 @@ function addMessage(text, type) {
 
 function setMode(mode) {
     currentMode = mode;
+    conversation = [];
+    chat.innerHTML = "";
+
     modeSelect.classList.add("hidden");
     inputArea.classList.remove("hidden");
+    backBtn.classList.remove("hidden");
 
-    if (mode === "grammar") {
-        addMessage(
-            "Grammar Correction Mode enabled. Enter a sentence to correct.",
-            "bot"
-        );
-    } else {
-        addMessage(
-            "Chat Mode enabled. Ask anything or clarify your doubts.",
-            "bot"
-        );
-    }
+    title.textContent =
+        mode === "grammar" ? "Grammar Correction" : "Chat Mode";
+
+    addMessage(
+        mode === "grammar"
+            ? "✍️ Grammar mode enabled. Enter a sentence."
+            : "💬 Chat mode enabled. Ask anything.",
+        "bot"
+    );
+}
+
+function goBack() {
+    currentMode = null;
+    conversation = [];
+    chat.innerHTML = "";
+
+    inputArea.classList.add("hidden");
+    modeSelect.classList.remove("hidden");
+    backBtn.classList.add("hidden");
+
+    title.textContent = "English Assistant";
 }
 
 async function sendMessage() {
     const text = input.value.trim();
     if (!text || !currentMode) return;
 
-    // Show user message
     addMessage(text, "user");
     input.value = "";
     sendBtn.disabled = true;
 
-    // 🔥 ADD USER MESSAGE TO MEMORY
-    conversation.push({
-        role: "user",
-        content: text
-    });
-
-    // Limit memory size
-    if (conversation.length > MAX_HISTORY * 2) {
-        conversation = conversation.slice(-MAX_HISTORY * 2);
-    }
+    conversation.push({ role: "user", content: text });
 
     try {
         const response = await fetch("/chat", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "X-API-KEY": API_KEY
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 mode: currentMode,
@@ -73,21 +75,15 @@ async function sendMessage() {
         const data = await response.json();
         if (!response.ok) throw new Error();
 
-        // 🔥 SAVE AI RESPONSE TO MEMORY
-        conversation.push({
-            role: "assistant",
-            content: data.reply
-        });
-
+        conversation.push({ role: "assistant", content: data.reply });
         addMessage(data.reply, "bot");
 
-    } catch (err) {
+    } catch {
         addMessage("❌ Error processing request.", "bot");
     } finally {
         sendBtn.disabled = false;
     }
 }
-
 
 sendBtn.addEventListener("click", sendMessage);
 
@@ -98,9 +94,10 @@ input.addEventListener("keydown", (e) => {
     }
 });
 
-// Dark mode
 toggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     toggle.textContent =
         document.body.classList.contains("dark") ? "☀️" : "🌙";
 });
+
+backBtn.addEventListener("click", goBack);

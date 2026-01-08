@@ -1,5 +1,5 @@
 :root {
-    --bg: #f3f4f6;
+    --bg: #f5f7fb;
     --card: #ffffff;
     --user: #4f46e5;
     --bot: #e5e7eb;
@@ -20,48 +20,55 @@
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: system-ui, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
 }
 
 .app {
-    max-width: 700px;
-    margin: 40px auto;
+    max-width: 720px;
+    height: 100vh;
+    margin: auto;
     background: var(--card);
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    height: 80vh;
 }
 
+/* Header */
 header {
-    padding: 15px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    padding: 14px;
     border-bottom: 1px solid #ccc;
 }
 
-header button {
+header h1 {
     font-size: 18px;
+    margin: 0;
+}
+
+header button {
     background: none;
     border: none;
+    font-size: 18px;
     cursor: pointer;
 }
 
+/* Chat */
 .chat {
     flex: 1;
-    padding: 15px;
+    padding: 12px;
     overflow-y: auto;
 }
 
 .message {
-    max-width: 75%;
+    max-width: 80%;
     padding: 10px 14px;
-    border-radius: 14px;
+    border-radius: 16px;
     margin-bottom: 10px;
     line-height: 1.4;
+    font-size: 14px;
 }
 
 .user {
@@ -76,6 +83,7 @@ header button {
     margin-right: auto;
 }
 
+/* Input */
 .input-area {
     display: flex;
     padding: 10px;
@@ -87,35 +95,54 @@ textarea {
     resize: none;
     padding: 10px;
     font-size: 14px;
+    border-radius: 8px;
 }
 
-button#sendBtn {
-    margin-left: 10px;
-    padding: 10px 16px;
-    font-size: 14px;
+#sendBtn {
+    margin-left: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
     background: var(--user);
     color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 6px;
+    font-size: 14px;
 }
+
+/* Mode select */
 .mode-select {
-    text-align: center;
     padding: 20px;
+    text-align: center;
+}
+
+.mode-select h2 {
+    margin-bottom: 16px;
 }
 
 .mode-select button {
-    margin: 10px;
-    padding: 10px 16px;
-    font-size: 14px;
-    background: #4f46e5;
-    color: white;
+    width: 100%;
+    max-width: 280px;
+    padding: 14px;
+    margin: 8px auto;
+    display: block;
+    font-size: 15px;
+    border-radius: 10px;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    background: var(--user);
+    color: white;
 }
 
+/* Utilities */
 .hidden {
     display: none;
 }
 
+/* Mobile tweaks */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 16px;
+    }
+
+    .message {
+        font-size: 13px;
+    }
+}

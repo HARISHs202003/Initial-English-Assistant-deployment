@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>English Assistant</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
 
 <div class="app">
     <header>
-        <h1>English Assistant</h1>
+        <button id="backBtn" class="hidden">← Back</button>
+        <h1 id="title">English Assistant</h1>
         <button id="themeToggle">🌙</button>
     </header>
 
     <div id="chat" class="chat"></div>
 
+    <!-- Mode Selection -->
     <div id="modeSelect" class="mode-select">
-        <p>Welcome! Choose a mode:</p>
-        <button onclick="setMode('grammar')">Grammar Correction</button>
-        <button onclick="setMode('chat')">Chat Mode</button>
+        <h2>Choose a mode</h2>
+        <button onclick="setMode('grammar')">✍️ Grammar Correction</button>
+        <button onclick="setMode('chat')">💬 Chat Mode</button>
     </div>
 
-    <div class="input-area hidden" id="inputArea">
+    <!-- Input -->
+    <div id="inputArea" class="input-area hidden">
         <textarea id="inputText" placeholder="Type here..."></textarea>
         <button id="sendBtn">Send</button>
     </div>
