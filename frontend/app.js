@@ -1,3 +1,6 @@
+let conversation = [];
+const MAX_HISTORY = 8;
+const API_KEY = "english-assistant-secret-123";
 
 let currentMode = null;
 
@@ -38,31 +41,53 @@ async function sendMessage() {
     const text = input.value.trim();
     if (!text || !currentMode) return;
 
+    // Show user message
     addMessage(text, "user");
     input.value = "";
     sendBtn.disabled = true;
 
+    // 🔥 ADD USER MESSAGE TO MEMORY
+    conversation.push({
+        role: "user",
+        content: text
+    });
+
+    // Limit memory size
+    if (conversation.length > MAX_HISTORY * 2) {
+        conversation = conversation.slice(-MAX_HISTORY * 2);
+    }
+
     try {
         const response = await fetch("/chat", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "X-API-KEY": API_KEY
+            },
             body: JSON.stringify({
-                text: text,
-                mode: currentMode
+                mode: currentMode,
+                messages: conversation
             })
         });
 
         const data = await response.json();
-
         if (!response.ok) throw new Error();
 
+        // 🔥 SAVE AI RESPONSE TO MEMORY
+        conversation.push({
+            role: "assistant",
+            content: data.reply
+        });
+
         addMessage(data.reply, "bot");
-    } catch {
+
+    } catch (err) {
         addMessage("❌ Error processing request.", "bot");
     } finally {
         sendBtn.disabled = false;
     }
 }
+
 
 sendBtn.addEventListener("click", sendMessage);
 
