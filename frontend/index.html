@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>English Assistant</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="app">
+    <header>
+        <h1>English Assistant</h1>
+        <button id="themeToggle">🌙</button>
+    </header>
+
+    <div id="chat" class="chat"></div>
+
+    <div id="modeSelect" class="mode-select">
+        <p>Welcome! Choose a mode:</p>
+        <button onclick="setMode('grammar')">Grammar Correction</button>
+        <button onclick="setMode('chat')">Chat Mode</button>
+    </div>
+
+    <div class="input-area hidden" id="inputArea">
+        <textarea id="inputText" placeholder="Type here..."></textarea>
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
