@@ -42,24 +42,37 @@ def health():
 # 🔥 MODE-BASED CHAT ENDPOINT
 @app.route("/chat", methods=["POST"])
 def chat():
+    # 🔐 API Key security
+    if request.headers.get("X-API-KEY") != os.getenv("APP_API_KEY"):
+        return jsonify({"error": "Unauthorized"}), 401
+
     data = request.get_json()
 
-    if not data or "text" not in data or "mode" not in data:
-        return jsonify({"error": "Missing 'text' or 'mode'"}), 400
+    # ✅ Validate payload
+    if not data or "mode" not in data or "messages" not in data:
+        return jsonify({"error": "Invalid request"}), 400
 
-    text = data["text"].strip()
     mode = data["mode"]
+    messages = data["messages"]
 
-    if not text:
-        return jsonify({"error": "Text cannot be empty"}), 400
-
-    if mode not in ["grammar", "chat"]:
-        return jsonify({"error": "Invalid mode"}), 400
+    if not isinstance(messages, list) or len(messages) == 0:
+        return jsonify({"error": "Messages must be a non-empty list"}), 400
 
     try:
-        reply = process_message(text, mode)
+        if mode == "grammar":
+            user_text = messages[-1]["content"]
+            reply = correct_english(user_text)
+
+        elif mode == "chat":
+            reply = process_messages(messages)
+
+        else:
+            return jsonify({"error": "Invalid mode"}), 400
+
         return jsonify({"reply": reply})
+
     except Exception as e:
+        print("CHAT ERROR:", e)
         return jsonify({"error": "AI service failed"}), 500
 
 
