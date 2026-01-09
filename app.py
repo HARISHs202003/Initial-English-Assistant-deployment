@@ -58,12 +58,13 @@ def chat():
     try:
         if mode == "grammar":
             reply = correct_english(messages[-1]["content"])
-        elif mode == "chat":
-            reply = process_messages(messages)
+        elif mode in ["chat", "business", "trb_geo"]:
+               reply = process_messages(messages, mode)
         else:
-            return jsonify({"error": "Invalid mode"}), 400
+             return jsonify({"error": "Invalid mode"}), 400
 
         return jsonify({"reply": reply})
+        
 
     except Exception as e:
         print("CHAT ERROR:", e)

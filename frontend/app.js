@@ -27,15 +27,23 @@ function setMode(mode) {
     inputArea.classList.remove("hidden");
     backBtn.classList.remove("hidden");
 
-    title.textContent =
-        mode === "grammar" ? "Grammar Correction" : "Chat Mode";
-
-    addMessage(
-        mode === "grammar"
-            ? "✍️ Grammar mode enabled. Enter a sentence."
-            : "💬 Chat mode enabled. Ask anything.",
-        "bot"
-    );
+    const modeTitles = {
+        grammar: "Grammar Correction",
+        chat: "Chat Mode",
+        business: "Business Idea Bot",
+        trb_geo: "TRB Geography Tutor"
+    };
+    
+    const modeMessages = {
+        grammar: "✍️ Grammar mode enabled. Enter a sentence.",
+        chat: "💬 Chat mode enabled. Ask anything.",
+        business: "💼 Business Idea Bot activated. Ask about India & Tamil Nadu business ideas.",
+        trb_geo: "📘 TRB Geography Tutor activated. Let’s prepare smartly!"
+    };
+    
+    title.textContent = modeTitles[mode];
+    addMessage(modeMessages[mode], "bot");
+    
 }
 
 function goBack() {
