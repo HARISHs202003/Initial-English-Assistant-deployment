@@ -97,7 +97,7 @@ def process_messages(messages: list, mode: str = "chat") -> str:
             return (
                 "Oh… Gayathri? 👀\n"
                 "Harish’s Gayathri?\n\n"
-                "January 13 is special for you.\n"
+                "January 12 is special for you.\n"
                 "Which emoji matches that day?\n\n"
                 "1️⃣ 😢  2️⃣ 🩸  3️⃣ 🎂  4️⃣ 💧  5️⃣ 😊"
             )
